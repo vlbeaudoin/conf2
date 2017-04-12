@@ -1,0 +1,182 @@
+#!/bin/bash
+#Version 2.0dev
+#Auteur Original : Vincent Duval
+#Version 2 par Victor Lacasse-Beaudoin
+#20170410
+
+optstring="a:cd:e:f:ilm:sv"
+action="version"
+curversion=`head -n 1 /etc/conf2/conf.versions`
+command=0
+
+while getopts $optstring opt; do
+	case $opt in
+		a)
+			action="add"
+			addarg=$OPTARG
+		;;
+		c)
+			command=1
+		;;
+		d)
+			action="diff"
+			diffarg=$OPTARG
+		;;
+		e)
+			action="edit"
+			editarg=$OPTARG
+		;;
+		f)
+			action="file"
+			filearg=$OPTARG
+		;;
+		i)
+			action="init"
+		;;
+		l)
+			action="list"
+		;;
+		m)
+			action="messages"
+			messagearg=$OPTARG
+		;;
+		s)
+			action="save"
+		;;
+		v)
+			bash /opt/sbin/conf2.t
+			if [ ! -z $OPTARG ] ; then
+				version=$OPTARG
+			else
+				version=$curversion
+			fi
+			if [ ! -e /etc/conf2/v$version/files ] ; then
+				echo "Cette version '$version' n'existe pas" <&2
+				exit 1
+			fi
+		;;
+		\?)
+			echo "Argument invalide : -$OPTARG" >&2
+			exit 1
+		;;
+	esac
+done
+if [ -z $version ] ; then
+	version=$curversion
+fi
+versionname=`tail -n +2 /etc/conf2/conf.versions | grep "^$version\b"` 
+case $action in
+	add)
+		nextfile=$(( `head -n 1 /etc/conf2/v$curversion/files` + 1 ))
+		if [ "$command" -eq "1" ]; then
+			$addarg >> /etc/conf2/v$curversion/$nextfile
+			echo "$nextfile c \"$addarg\"" > /etc/conf2/v$curversion/files
+			sed "1s/.*/$nextfile/" /etc/conf2/v$curversion/files > /etc/conf2/v$curversion/files_
+			mv /etc/conf2/v$curversion/files_ /etc/conf2/v$curversion/files
+		else
+			if [ ! -e $addarg ] ; then
+				echo "Le fichier '$addarg' est invalide"
+			else 
+				cp "$addarg" /etc/conf2/v$curversion/$nextfile
+				echo "$nextfile f \"$addarg\"" >> /etc/conf2/v$curversion/files
+				sed "1s/.*/$nextfile/" /etc/conf2/v$curversion/files > /etc/conf2/v$curversion/files_
+				mv /etc/conf2/v$curversion/files_ /etc/conf2/v$curversion/files
+			fi
+		fi
+	;;
+	diff)
+		version=$diffarg
+		tail -n +2 /etc/conf2/v$version/files | while read f
+		do
+			n=`echo $f | cut -d ' ' -f 1`
+			c=`echo $f | cut -d ' ' -f 2`
+			f=`echo $f | cut -d ' ' -f 3 | sed 's/"//g'`
+			if [ "$c" = "c" ]; then
+				echo "Différences de la commande $f"
+				$f > /etc/conf2/v$version/_$n
+				diff -p --old-line-format='--- %l
+' --new-line-format='+++ %l
+' --unchanged-line-format='    %l
+' /etc/conf2/v$version/$n /etc/conf2/v$version/_$n | sed 's/^/  /'
+			else
+				echo "Différences du fichier $f"
+				diff -p --old-line-format='--- %l
+' --new-line-format='+++ %l
+' --unchanged-line-format='    %l
+' /etc/conf2/v$version/$n $f | sed 's/^/  /'
+			fi
+		done
+	;;
+	edit)
+		c=`tail -n +2 /etc/conf2/v$version/files | grep "^$editarg\b" | cut -d ' ' -f 2`
+		f=`tail -n +2 /etc/conf2/v$version/files | grep "^$editarg\b" | cut -d ' ' -f 3 | sed 's/"//g'`
+
+		# Test de la présence ou non de NANO		
+		testnano=$(rpm -qa | grep nano)
+		#echo Nano: $testnano
+
+		if [ -z $testnano ];
+			then
+				echo $'NANO n\'est pas présent. VIM sera utilisé à la place.'
+				editor=vi
+			else
+				echo $'NANO est présent. Il sera utilisé.'
+				editor=nano
+		fi;
+
+		if [ "$c" = "f" ]; then
+			echo "Édition du fichier $editarg ($f)"
+			$editor $f
+		fi
+	;;
+	file)
+		c=`tail -n +2 /etc/conf2/v$version/files | grep "^$editarg\b" | cut -d ' ' -f 2`
+		f=`tail -n +2 /etc/conf2/v$version/files | grep "^$filearg\b" | cut -d ' ' -f 3 | sed 's/"//g'`
+		if [ "$c" = "f" ]; then
+			echo "Contenu du fichier $filearg ($f)"
+			cat $f | sed 's/^/  /'
+		else
+			echo "Résultat de la commande $filearg ($f)"
+			$f | sed 's/^/  /'
+		fi
+	;;
+	init)
+		# wow le beau ascii art wowow
+		bash /opt/sbin/conf2.t
+
+		mkdir -p /etc/conf2/v0
+		echo 0 > /etc/conf2/v0/files
+		echo 0 > /etc/conf2/conf.versions
+		echo "0 \"Configuration initiale\"" >> /etc/conf2/conf.versions
+	;;
+	list)
+		echo "Fichiers enregistrés dans la version $version ($versionname)"
+		tail -n +2 /etc/conf2/v$version/files | sed 's/^/  /'
+	;;
+	messages)
+		tail -n $messagearg /var/log/messages
+	;;
+	save)
+		nextversion=$(( `head -n 1 /etc/conf2/conf.versions` + 1 ))
+		mkdir /etc/conf2/v$nextversion
+		cp /etc/conf2/v$curversion/files /etc/conf2/v$nextversion/files
+		tail -n +2 /etc/conf2/v$curversion/files | while read f
+		do
+			n=`echo $f | cut -d ' ' -f 1`
+			c=`echo $f | cut -d ' ' -f 2`
+			f=`echo $f | cut -d ' ' -f 3 | sed 's/"//g'`
+			if [ "$c" = "c" ]; then
+				$f > /etc/conf2/v$nextversion/$n
+			else
+				cp $f /etc/conf2/v$nextversion/$n
+			fi
+		done
+		echo "$nextversion \"Version $nextversion\"" >> /etc/conf2/conf.versions
+		sed "1s/.*/$nextversion/" /etc/conf2/conf.versions > /etc/conf2/conf.versions_
+		mv /etc/conf2/conf.versions_ /etc/conf2/conf.versions
+	;;
+	version)
+		v=`tail -n +2 /etc/conf2/conf.versions | grep "^$curversion\b" | cut -d ' ' -f 2 | sed 's/"//g'`
+		echo "Version courante : $curversion ($v)"
+	;;
+esac
