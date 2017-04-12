@@ -2,7 +2,7 @@
 #Version 2.0dev
 #Auteur Original : Vincent Duval
 #Version 2 par Victor Lacasse-Beaudoin
-#20170410
+#20170412
 
 optstring="a:cd:e:f:ilm:sv"
 action="version"
@@ -141,13 +141,19 @@ case $action in
 		fi
 	;;
 	init)
-		# wow le beau ascii art wowow
-		bash /opt/sbin/conf2.t
+		if [ -f /etc/conf2/conf.versions ];
+		then
+			echo 'CONF2 déjà initialisé. Merci quand même!'
+		else
+			echo 'Initialisation de CONF2 en cours...'
+			# oh wow le beau ascii art wowow
+			bash /usr/bin/conf2.t
 
-		mkdir -p /etc/conf2/v0
-		echo 0 > /etc/conf2/v0/files
-		echo 0 > /etc/conf2/conf.versions
-		echo "0 \"Configuration initiale\"" >> /etc/conf2/conf.versions
+			mkdir -p /etc/conf2/v0
+			echo 0 > /etc/conf2/v0/files
+			echo 0 > /etc/conf2/conf.versions
+			echo "0 \"Configuration initiale\"" >> /etc/conf2/conf.versions
+		fi;
 	;;
 	list)
 		echo "Fichiers enregistrés dans la version $version ($versionname)"
