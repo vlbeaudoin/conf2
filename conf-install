@@ -1,5 +1,4 @@
 #!/bin/bash
-
 if [ ! -d src/ ]; then
   echo "Répertoire src/ non-présent."
   echo "Êtes-vous dans le répertoire de conf2? Cela est nécessaire pour installer conf2."
