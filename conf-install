@@ -1,64 +1,20 @@
 #!/bin/bash
-# Installation du gestionnaire de configuration
-# Auteur: Victor Lacasse-Beaudoin
-# Date: 2017-04-06
-# Version: 1.0
 
-
-#---
-## Verification que on est dans le bon répertoire (on verifie que les fichiers qui seront appelés existent)
 if [ ! -d src/ ]; then
-    echo "Répertoire src/ non-présent."
-    echo "Êtes-vous dans le répertoire de conf2? Cela est nécessaire pour installer conf2."
+  echo "Répertoire src/ non-présent."
+  echo "Êtes-vous dans le répertoire de conf2? Cela est nécessaire pour installer conf2."
 else
-    #---
-    ## Déplacement des fichier du gestionnaire de configurations vers "/opt/sbin"
-    mkdir -p /opt/sbin -v
-    cp src/conf /opt/sbin/conf -v
-    cp src/conf2.t /opt/sbin/conf2.t -v
+  # On déplace le script et le titre vers le répertoire /usr/bin
+  cp src/conf /usr/bin/conf -v
+  cp src/conf2.t /usr/bin/conf2.t -v
 
-    #---
-    ## Création d'un script pour l'ajout du dossier "/opt/sbin" au PATH
+  # On donne les droits en exécution à root sur le script et sur le titre en ASCII Art (vraiment beau, vraiment beau.)
+  chmod u+x /usr/bin/conf -v
+  chmod u+x /usr/bin/conf2.t -v
 
-    # Ajout du répertoire du script au PATH de tous les utilisateurs
-    echo $'Ajout du répertoire /opt/sbin au PATH...'
-    conftopath="export PATH=/opt/sbin:$PATH" 
-    echo $conftopath > /etc/profile.d/conf-to-path.sh
+  # Déplacement de la page MAN vers son répertoire
+  cp src/conf.1.gz /usr/share/man/man1/conf.1.gz -v
 
-    #---
-    ## Modification des permissions
-    # On donne accès aux administrateurs d'utiliser conf et le titre en ASCII ART (parce que le ASCII Art c'est quand même cool)
-    chown root:wheel /opt/sbin/conf -v
-    chown root:wheel /opt/sbin/conf2.t -v
-
-    # Ajout des permissions d'exécutions sur le script et le titre
-    chmod g+x /opt/sbin/conf -v
-    chmod g+x /opt/sbin/conf2.t -v
-
-    #---
-    ## Copie de la MAN PAGE et association au script
-
-    # Ajout de l'arborescence pour les MAN
-    mkdir -p /opt/man/man1 -v
-
-    # Copie de la page MAN vers l'arborescence nouvellement ajoutée
-    cp src/conf.1.gz /opt/man/man1/conf.1.gz -v
-
-    # Test de la présence de /opt/man au MANPATH
-    manpathtest=$(cat /etc/man_db.conf | grep 'MANDATORY_MANPATH /opt/man' | tail -1)
-    manpathtest=$(echo $manpathtest)
-
-    if [ -z $manpathtest 2>> /var/log/messages]
-        then
-            echo $'Ajout de /opt/man au MANPATH'
-	    # Ajout du répertoire /opt/man au MANPATH
-	    manpathline=$'MANDATORY_MANPATH /opt/man'
-	    echo $manpathline >> /etc/man_db.conf
-        else
-            echo $'/opt/man déjà dans le MANPATH'
-    fi;
-
-    # On reload la bd de MAN
-    echo $'Execution de mandb...'
-    mandb -q
+  echo $'Execution de mandb...'
+  mandb -q
 fi;
