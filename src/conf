@@ -114,7 +114,10 @@ case $action in
 		# Test de la présence ou non de NANO		
 		testnano=$(rpm -qa | grep nano)
 		#echo Nano: $testnano
-		if [ "$editarg" -eq "$editarg" ] 2>/dev/null;
+		
+		maxversion=$(ls /etc/conf2/v$version | tail -2 | head -1)
+		
+		if [ "$editarg" -le "$maxversion" ] 2>/dev/null;
 		then
 			if [ -z $testnano ];
 			then
@@ -131,7 +134,7 @@ case $action in
 				$editor $f
 			fi;
 		else
-			echo $'[Argument invalide] L\'argument choisi doit être un id_fichier (int)'
+			echo $'[Argument invalide] L\'argument choisi doit être un id_fichier (int) valide -> [conf -l]'
 			exit 1
 		fi;
 	;;
