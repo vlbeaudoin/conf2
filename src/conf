@@ -44,7 +44,7 @@ while getopts $optstring opt; do
 			action="save"
 		;;
 		v)
-			bash /opt/sbin/conf2.t
+			bash /usr/bin/conf2.t
 			if [ ! -z $OPTARG ] ; then
 				version=$OPTARG
 			else
@@ -114,20 +114,26 @@ case $action in
 		# Test de la présence ou non de NANO		
 		testnano=$(rpm -qa | grep nano)
 		#echo Nano: $testnano
-
-		if [ -z $testnano ];
+		if [ "$editarg" -eq "$editarg" ] 2>/dev/null;
+		then
+			if [ -z $testnano ];
 			then
 				echo $'NANO n\'est pas présent. VIM sera utilisé à la place.'
 				editor=vi
 			else
 				echo $'NANO est présent. Il sera utilisé.'
 				editor=nano
+			fi;
+	
+			if [ "$c" = "f" ];
+			then
+				echo "Édition du fichier $editarg ($f)"
+				$editor $f
+			fi;
+		else
+			echo $'[Argument invalide] L\'argument choisi doit être un id_fichier (int)'
+			exit 1
 		fi;
-
-		if [ "$c" = "f" ]; then
-			echo "Édition du fichier $editarg ($f)"
-			$editor $f
-		fi
 	;;
 	file)
 		c=`tail -n +2 /etc/conf2/v$version/files | grep "^$editarg\b" | cut -d ' ' -f 2`
