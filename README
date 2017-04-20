@@ -16,6 +16,13 @@ CHANGEMENTS DEPUIS LA VERSION 1
 INSTALLATION
 ---
 
+Étape 0
+--
+On télécharge le fichier compressé le plus récent (wget, curl, ...)
+
+Commandes:
+	# wget https://github.com/vlbeaudoin/conf2/raw/master/conf2-0dev-latest.tar.gz
+
 Étape 1
 --
 Simplement exécuter le fichier 'conf-install' à l'aide de bash pour installer le script et tous ses répertoires.
