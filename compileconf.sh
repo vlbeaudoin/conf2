@@ -4,7 +4,7 @@
 cd /tmp
 
 # Obtention du projet
-wget https://github.com/vlbeaudoin/conf2/raw/master/conf2-latest.tar.gz
+wget https://github.com/vlbeaudoin/conf2/raw/master/releases/conf2-latest.tar.gz
 
 # untar le projet 
 echo "Extraction du projet..."
