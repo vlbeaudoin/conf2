@@ -1,59 +1,38 @@
-Version 2.0dev4 de CONF, le gestionnaire de configurations par Vincent Duval
-Version 1.0 de conf-install, l'installateur de CONF2.
+Version 2.0 de CONF, le gestionnaire de configurations par Vincent Duval
 
-Date de modification: 2017-04-10
+Date de modification: 2017-04-24
 
-CHANGEMENTS DEPUIS LA VERSION 1
+
+DESCRIPTION
 ---
--Création d'un script d'installation exécutable
--Changement du répertoire de travail de CONF de "/scripts/" vers "/etc/conf2/"
--Modification de l'édition en vérifiant la présence ou non de NANO. Si non-présent, utilisation de VIM pour l'édition
--Ajout d'un titre en ASCII art lors de l'initialisation initiale de CONF ("conf -i") et lors de la vérification de version ("conf" ou "conf -v")
--Ajout d'une page MAN dans /opt/man/man.1/conf.1
--Modification des variables d'environnement PATH et MANPATH dans le script d'installation
--Ajout de commentaires à conf-install
+Permet de gérer les versions des fichiers de configuration, en plus d'accéder rapidement à certains fichiers plus profonds.
+
 
 INSTALLATION
 ---
 
-Étape 0
---
-On télécharge le fichier compressé le plus récent (wget, curl, ...)
+1) Obtenir le script d'installation de conf2
+	# wget https://raw.githubusercontent.com/vlbeaudoin/conf2/master/getconf.sh
+2) Exécuter le script d'installation
+	# bash getconf.sh
 
-Commandes:
-	# wget https://github.com/vlbeaudoin/conf2/raw/master/conf2-0dev-latest.tar.gz
-
-Étape 1
---
-Simplement exécuter le fichier 'conf-install' à l'aide de bash pour installer le script et tous ses répertoires.
-
-IMPORTANT:
-	Vous devez être dans le répertoire /conf2/ afin que le script fonctionne.
-	ex:
-		# pwd
-		/tmp/conf2
-
-Commande:
-	# bash conf-install
-
-Étape 2
---
-Quittez la session courante afin d'effectuer le changement à la variable PATH (pour permettre l'exécution du script sans utiliser le répertoire complet).
-
-Commande:
-	(Dans un terminal)
-		# exit
-	(Directement sur la machine)
-		# logout
-
-Permet d'appeler le script avec:
-	# conf
-Au lieu de :
-	# ./opt/sbin/conf
+Commande complète (pour installation rapide):
+	# wget https://raw.githubusercontent.com/vlbeaudoin/conf2/master/getconf.sh && bash getconf.sh
 
 UTILISATION
 ---
-Voir la MAN PAGE du script
 
-Commande:
+1) Installer conf (voir plus bas)
+2) Initialiser conf 
+	# conf -i
+3) Ajouter un ou plusieurs fichier(s) à conf
+	# conf -a /directory/file
+4) Voir la liste des fichiers
+	# conf -l
+5) Sauvegarder les fichiers courants
+	# conf -s
+6) Voir la version de sauvegarde courante
+	# conf -v
+
+Pour plus de détails, voir la page MAN inclue avec le script
 	# man conf
