@@ -1,0 +1,8 @@
+## conf.options
+## Fichier d'options de préférences pour CONF2
+#
+# [editor] Éditeur préférentiel 
+# auto: Choix automatique selon les packages présents sur la machine. Choix par défaut.
+# nano, pico, vim, etc.: choix manuel
+#
+#editor=auto
