@@ -21,10 +21,16 @@ function getconf {
     # On déplace le script et le titre vers le répertoire /usr/bin
     cp src/conf /usr/bin/conf -v
     cp src/conf2.t /usr/bin/conf2.t -v
-
+    
     # On donne les droits en exécution à root sur le script et sur le titre en ASCII Art (vraiment beau, vraiment beau.)
     chmod u+x /usr/bin/conf -v
     chmod u+x /usr/bin/conf2.t -v
+
+    # Création du dossier /etc/conf2
+    mkdir /etc/conf2 -v
+
+    # On déplace le fichier d'options vers /etc/conf2/conf.options
+    cp src/conf.options /etc/conf2/conf.options -v
 
     # Déplacement de la page MAN vers son répertoire
     cp src/conf.1.gz /usr/share/man/man1/conf.1.gz -v

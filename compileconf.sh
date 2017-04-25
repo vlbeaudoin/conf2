@@ -23,6 +23,8 @@ cp /usr/bin/conf /tmp/conf2/src/conf -v
 cp /usr/bin/conf2.t /tmp/conf2/src/conf2.t -v
 #conf.1.gz
 cp /usr/share/man/man1/conf.1.gz /tmp/conf2/src/conf.1.gz -v
+#conf.options
+cp /etc/conf2/conf.options /tmp/conf2/src/conf.options -v
 
 #TODO tarball
 echo "Compression des fichiers..."
