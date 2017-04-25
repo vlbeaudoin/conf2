@@ -24,11 +24,11 @@ INSTALLATION
 ---
 
 1) Obtenir le script d'installation de conf2
-	`# wget https://raw.githubusercontent.com/vlbeaudoin/conf2/master/getconf.sh`
+	`wget https://raw.githubusercontent.com/vlbeaudoin/conf2/master/getconf.sh`
 2) Exécuter le script d'installation
-	`# bash getconf.sh`
+	`bash getconf.sh`
 Commande complète (pour installation rapide)
-	`# wget https://raw.githubusercontent.com/vlbeaudoin/conf2/master/getconf.sh && bash getconf.sh`
+	`wget https://raw.githubusercontent.com/vlbeaudoin/conf2/master/getconf.sh && bash getconf.sh`
 
 
 UTILISATION
@@ -36,15 +36,15 @@ UTILISATION
 
 1) Installer conf (voir plus bas)
 2) Initialiser conf 
-	# conf -i
+	`conf -i`
 3) Ajouter un ou plusieurs fichier(s) à conf
-	# conf -a /directory/file
+	`conf -a /directory/file`
 4) Voir la liste des fichiers
-	# conf -l
+	`conf -l`
 5) Sauvegarder les fichiers courants
-	# conf -s
+	`conf -s`
 6) Voir la version de sauvegarde courante
-	# conf -v
+	`conf -v`
 
 Pour plus de détails, voir la page MAN inclue avec le script
-	# man conf
+	`man conf`
