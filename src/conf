@@ -4,6 +4,28 @@
 #Version 2 par Victor Lacasse-Beaudoin
 #20170412
 
+# functions
+function findpkg {
+local _result=$(rpm -qa | grep $1)
+if [ -z $_result ] 2> /dev/null;
+ then
+  echo false
+ else
+  echo true
+fi;
+}
+
+function findopt { # <package> <default>
+local _result=$(grep $1 </etc/conf2/conf.options)
+if [ "${_result:0:1}" = "#" ] || [ -z $_result ]
+then
+ _result=$2
+else 
+_result=${_result##*=}
+fi
+echo $_result
+}
+
 optstring="a:cd:e:f:ilm:sv"
 action="version"
 curversion=`head -n 1 /etc/conf2/conf.versions`
@@ -110,22 +132,33 @@ case $action in
 	edit)
 		c=`tail -n +2 /etc/conf2/v$version/files | grep "^$editarg\b" | cut -d ' ' -f 2`
 		f=`tail -n +2 /etc/conf2/v$version/files | grep "^$editarg\b" | cut -d ' ' -f 3 | sed 's/"//g'`
+		
+		maxversion=$(ls /etc/conf2/v$version | tail -2 | head -1)	
+		EDITOR="$(findopt editor auto)"
 
-		# Test de la présence ou non de NANO		
-		testnano=$(rpm -qa | grep nano)
-		#echo Nano: $testnano
-		
-		maxversion=$(ls /etc/conf2/v$version | tail -2 | head -1)
-		
 		if [ "$editarg" -le "$maxversion" ] 2>/dev/null;
 		then
-			if [ -z $testnano ];
+			if [ $EDITOR = auto ];
 			then
-				echo $'NANO n\'est pas présent. VIM sera utilisé à la place.'
-				editor=vi
+			 if [ $(findpkg nano) = 'true' ]
+			 then
+			  echo Éditeur automatique: NANO
+			  editor=nano
+			 elif [ $(findpkg pico) = 'true' ]
+			 then
+			  echo Éditeur automatique: PICO
+			  editor=pico
+			 elif [ $(findpkg vim) = 'true' ]
+			 then
+			  echo Éditeur automatique: VIM
+			  editor=vim
+			 else
+			  echo Éditeur automatique: VI
+			  editor=vi
+			 fi;
 			else
-				echo $'NANO est présent. Il sera utilisé.'
-				editor=nano
+			 echo Éditeur: $EDITOR
+			 editor=$EDITOR
 			fi;
 	
 			if [ "$c" = "f" ];
