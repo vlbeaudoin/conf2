@@ -12,7 +12,7 @@ tar -zxf /tmp/conf2-latest.tar.gz
 
 # Retirer les fichiers dans src/ pour y mettre les plus récents
 echo "Nettoyage des vieux fichiers source..."
-rm -rf /tmp/conf2.src
+rm -rf /tmp/conf2/src
 # Créer l'architecture de conf2/ dans /tmp
 mkdir -p /tmp/conf2/src -v
 
