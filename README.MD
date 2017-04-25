@@ -26,7 +26,7 @@ INSTALLATION
 	
 	Commande complète (pour installation rapide)
 	
-	`wget https://raw.githubusercontent.com/vlbeaudoin/conf2/master/getconf.sh`
+	`wget https://raw.githubusercontent.com/vlbeaudoin/conf2/master/getconf.sh && bash getconf.sh`
     
 UTILISATION
 ---
