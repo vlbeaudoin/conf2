@@ -27,9 +27,12 @@ INSTALLATION
 
 	`bash getconf.sh`
 	
-	Commande complète (pour installation rapide)
-	
-	`wget https://raw.githubusercontent.com/vlbeaudoin/conf2/master/getconf.sh && bash getconf.sh && conf -i`
+INSTALLATION RAPIDE
+---
+
+Simplement exécutez la commande suivante en tant que root pour être prêtE en quelques secondes!
+
+	`wget https://raw.githubusercontent.com/vlbeaudoin/conf2/master/getconf.sh && bash getconf.sh && conf -i && rm -rf getconf.sh`
     
 UTILISATION
 ---
