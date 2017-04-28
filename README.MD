@@ -22,14 +22,16 @@ INSTALLATION
     
 2) Exécuter le script d'installation
 
-	`bash getconf.sh`
+	`sudo . getconf.sh`
 	
 	Commande complète (pour installation rapide)
 	
-	`wget https://raw.githubusercontent.com/vlbeaudoin/conf2/master/getconf.sh && bash getconf.sh`
+	`wget https://raw.githubusercontent.com/vlbeaudoin/conf2/master/getconf.sh && sudo . getconf.sh && sudo conf -i`
     
 UTILISATION
 ---
+
+Note: Toutes les commandes de CONF2 peuvent être utilisées par un utilisateur autre que root, la compatibilité avec `sudo` est présente.
 
 1) Installer conf (voir plus haut)
 2) Initialiser conf 
