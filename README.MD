@@ -22,11 +22,11 @@ INSTALLATION
     
 2) Exécuter le script d'installation
 
-	`sudo . getconf.sh`
+	`sudo sh -c getconf.sh`
 	
 	Commande complète (pour installation rapide)
 	
-	`wget https://raw.githubusercontent.com/vlbeaudoin/conf2/master/getconf.sh && sudo . getconf.sh && sudo conf -i`
+	`wget https://raw.githubusercontent.com/vlbeaudoin/conf2/master/getconf.sh && sudo sh -c getconf.sh && sudo conf -i`
     
 UTILISATION
 ---
