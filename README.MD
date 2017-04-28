@@ -26,13 +26,17 @@ INSTALLATION
 2) Exécuter le script d'installation
 
 	`bash getconf.sh`
+
+3) Retirer le script d'installation
+
+	`rm getconf.sh`
 	
 INSTALLATION RAPIDE
 ---
 
 Simplement exécutez la commande suivante en tant que root pour être prêtE en quelques secondes!
 
-	`wget https://raw.githubusercontent.com/vlbeaudoin/conf2/master/getconf.sh && bash getconf.sh && conf -i && rm -rf getconf.sh`
+`wget https://raw.githubusercontent.com/vlbeaudoin/conf2/master/getconf.sh && bash getconf.sh && rm -rf getconf.sh && conf -i`
     
 UTILISATION
 ---
