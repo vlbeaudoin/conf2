@@ -15,6 +15,9 @@ Permet de gérer les versions des fichiers de configuration, en plus d'accéder 
 
 INSTALLATION
 ---
+0) L'utilisateur courant doit être __root__. 
+	
+	`sudo bash`
 
 1) Obtenir le script d'installation de conf2
 
@@ -22,11 +25,11 @@ INSTALLATION
     
 2) Exécuter le script d'installation
 
-	`sudo sh -c getconf.sh`
+	`bash getconf.sh`
 	
 	Commande complète (pour installation rapide)
 	
-	`wget https://raw.githubusercontent.com/vlbeaudoin/conf2/master/getconf.sh && sudo sh -c getconf.sh && sudo conf -i`
+	`wget https://raw.githubusercontent.com/vlbeaudoin/conf2/master/getconf.sh && bash getconf.sh && conf -i`
     
 UTILISATION
 ---
