@@ -15,16 +15,17 @@ if [ -z $_result ] 2> /dev/null;
 fi;
 }
 
-function findopt { # <package> <default>
+function findopt { # <option> <default>
 local _result=$(grep $1 </etc/conf2/conf.options)
-if [ "${_result:0:1}" = "#" ] || [ -z $_result ]
+if [ "$(expr substr $_result 1 1)" = "#" ] || [ -z $_result ]
 then
  _result=$2
-else 
+else
 _result=${_result##*=}
 fi
 echo $_result
 }
+
 
 optstring="a:cd:e:f:ilm:sv"
 action="version"
