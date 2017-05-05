@@ -6,26 +6,36 @@
 
 # functions
 function findpkg {
-local _result=$(rpm -qa | grep $1)
-if [ -z $_result ] 2> /dev/null;
- then
-  echo false
- else
-  echo true
-fi;
+ local _result=$(rpm -qa | grep $1)
+ if [ -z $_result ] 2> /dev/null;
+  then
+   echo false
+  else
+   echo true
+ fi;
 }
 
 function findopt { # <option> <default>
-local _result=$(grep $1 </etc/conf2/conf.options)
-if [ "$(expr substr $_result 1 1)" = "#" ] || [ -z $_result ]
-then
- _result=$2
-else
-_result=${_result##*=}
-fi
-echo $_result
+ local _result=$(grep $1 </etc/conf2/conf.options)
+ if [ "$(expr substr $_result 1 1)" = "#" ] || [ -z $_result ]
+ then
+  _result=$2
+ else
+ _result=${_result##*=}
+ fi
+ echo $_result
 }
 
+function getfileatver  { # <file_number>
+ # Echo le fichier spécifié au numéro passé en argument. Si aucun fichier n'existe, la string sera vide. ( Hint: if [ -z $(getfileatver $editarg ]; )
+ local _result=$(cat /etc/conf2/v$version/files | grep "$1 f")
+ _result=$(echo ${_result#*f} | sed s_'"'__g)
+ #if [ -z "$_result" ];
+ #then
+ # exit 1
+ #fi;
+ echo $_result;
+}
 
 optstring="a:cd:e:f:ilm:sv"
 action="version"
@@ -131,15 +141,12 @@ case $action in
 		done
 	;;
 	edit)
-		c=`tail -n +2 /etc/conf2/v$version/files | grep "^$editarg\b" | cut -d ' ' -f 2`
-		f=`tail -n +2 /etc/conf2/v$version/files | grep "^$editarg\b" | cut -d ' ' -f 3 | sed 's/"//g'`
+		editor="$(findopt editor auto)"
+		file="$(getfileatver $editarg)"
 		
-		maxversion=$(ls /etc/conf2/v$version | tail -2 | head -1)	
-		EDITOR="$(findopt editor auto)"
-
-		if [ "$editarg" -le "$maxversion" ] 2>/dev/null;
+		if [ ! -z $(echo $file) ];
 		then
-			if [ $EDITOR = auto ];
+			if [ $editor = auto ];
 			then
 			 if [ $(findpkg nano) = 'true' ]
 			 then
@@ -158,15 +165,11 @@ case $action in
 			  editor=vi
 			 fi;
 			else
-			 echo Éditeur: $EDITOR
-			 editor=$EDITOR
+			 echo Éditeur: $editor
 			fi;
-	
-			if [ "$c" = "f" ];
-			then
-				echo "Édition du fichier $editarg ($f)"
-				$editor $f
-			fi;
+			
+			echo "Édition du fichier $editarg ($filetoedit)"
+			$editor $file
 		else
 			echo $'[Argument invalide] L\'argument choisi doit être un id_fichier (int) valide -> [conf -l]'
 			exit 1
