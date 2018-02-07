@@ -21,7 +21,7 @@ Simplement exécutez la commande suivante en tant que root pour être prêtE en 
 `wget https://raw.githubusercontent.com/vlbeaudoin/conf2/master/getconf.sh && bash getconf.sh && rm -rf getconf.sh && conf -i`
 
 
-INSTALLATION
+INSTALLATION MANUELLE
 ---
 0) L'utilisateur courant doit être __root__. 
 	
