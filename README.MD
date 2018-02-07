@@ -13,6 +13,14 @@ DESCRIPTION
 Permet de gérer les versions des fichiers de configuration, en plus d'accéder rapidement à certains fichiers plus profonds.
 
 
+INSTALLATION RAPIDE
+---
+
+Simplement exécutez la commande suivante en tant que root pour être prêtE en quelques secondes!
+
+`wget https://raw.githubusercontent.com/vlbeaudoin/conf2/master/getconf.sh && bash getconf.sh && rm -rf getconf.sh && conf -i`
+
+
 INSTALLATION
 ---
 0) L'utilisateur courant doit être __root__. 
@@ -30,14 +38,8 @@ INSTALLATION
 3) Retirer le script d'installation
 
 	`rm getconf.sh`
-	
-INSTALLATION RAPIDE
----
 
-Simplement exécutez la commande suivante en tant que root pour être prêtE en quelques secondes!
 
-`wget https://raw.githubusercontent.com/vlbeaudoin/conf2/master/getconf.sh && bash getconf.sh && rm -rf getconf.sh && conf -i`
-    
 UTILISATION
 ---
 
